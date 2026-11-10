@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cek Kelulusan Siswa</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--text:#1b2433;--muted:#667085;--line:#e4e7ec;--accent:#2f5bea;--ok-bg:#dcfae6;--ok:#067647;--no-bg:#fee4e2;--no:#b42318;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10141c;--card:#1a2030;--text:#eef1f7;--muted:#98a2b3;--line:#2b3347;--accent:#7b9bff;--ok-bg:#0d3b25;--ok:#75e0a7;--no-bg:#4a1a16;--no:#fda29b}}
+:root[data-theme="dark"]{--bg:#10141c;--card:#1a2030;--text:#eef1f7;--muted:#98a2b3;--line:#2b3347;--accent:#7b9bff;--ok-bg:#0d3b25;--ok:#75e0a7;--no-bg:#4a1a16;--no:#fda29b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5}
+main{max-width:480px;margin:0 auto;padding:40px 16px 48px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px}
+h1{font-size:1.5rem;margin:0 0 4px;text-align:center}
+.sub{color:var(--muted);margin:0 0 20px;text-align:center}
+label{display:block;font-weight:600;margin-bottom:6px}
+input{width:100%;font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px}
+input:focus{outline:2px solid var(--accent);outline-offset:1px}
+button{width:100%;margin-top:12px;font:inherit;font-weight:600;color:#fff;background:var(--accent);border:0;border-radius:10px;padding:12px;cursor:pointer}
+#hasil{margin-top:20px}
+.res{border-radius:12px;padding:18px;text-align:center}
+.res.lulus{background:var(--ok-bg);color:var(--ok)}
+.res.tidak{background:var(--no-bg);color:var(--no)}
+.res.nf{background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+.res h2{margin:6px 0 2px;font-size:1.6rem}
+.res .nm{font-weight:600;font-size:1.1rem}
+.res small{opacity:.85}
+</style>
+</head>
+<body>
+<main>
+<div class="card">
+<h1>Cek Kelulusan Siswa</h1>
+<p class="sub">Masukkan nama lengkap kamu untuk melihat status kelulusan.</p>
+<label for="nama">Nama lengkap</label>
+<input id="nama" type="text" placeholder="Contoh: Herman" autocomplete="off">
+<button id="cek" type="button">Cek Status</button>
+<div id="hasil" aria-live="polite"></div>
+</div>
+</main>
+<script>
+// Tambah siswa baru di sini
+var siswa=[
+{nama:"Ditia Eru",kelas:"7",status:"Tidak Lulus"},
+{nama:"Herman",kelas:"7",status:"Lulus"}
+];
+var inp=document.getElementById("nama"),out=document.getElementById("hasil");
+function norm(s){return s.toLowerCase().replace(/\s+/g," ").trim()}
+function esc(s){var d=document.createElement("div");d.textContent=s;return d.innerHTML}
+function cek(){
+var n=norm(inp.value);
+if(!n){out.innerHTML="";return}
+var s=siswa.filter(function(x){return norm(x.nama)===n})[0];
+if(!s){out.innerHTML="<div class=\"res nf\">Nama tidak ditemukan. Pastikan penulisan nama sudah benar.</div>";return}
+var ok=s.status==="Lulus";
+out.innerHTML="<div class=\"res "+(ok?"lulus":"tidak")+"\"><div class=\"nm\">"+esc(s.nama)+"</div><small>Kelas "+esc(s.kelas)+"</small><h2>"+(ok?"SELAMAT, KAMU LULUS":"TIDAK LULUS")+"</h2></div>";
+}
+document.getElementById("cek").addEventListener("click",cek);
+inp.addEventListener("keydown",function(e){if(e.key==="Enter")cek()});
+</script>
+</body>
+</html>
